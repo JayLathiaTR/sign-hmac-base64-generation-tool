@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign HMAC (AIT / AIA)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <div>
+        <h1>HMAC-Base64 Generator</h1>
+        <p class="muted">Runs fully in your browser. No API calls. Payload order + types are enforced.</p>
+      </div>
+      <a class="btn secondary" href="https://github.com/JayLathiaTR/sign-hmac-base64-generation-tool" target="_blank" rel="noreferrer">GitHub</a>
+    </header>
+
+    <section class="card">
+      <div class="grid">
+        <label class="field">
+          <span>Secret Key</span>
+          <input id="secretKey" type="password" placeholder="Enter secret key" />
+        </label>
+
+        <label class="field">
+          <span>Product</span>
+          <select id="product">
+            <option value="AIT">AIT</option>
+            <option value="AIA" selected>AIA</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="aitSection" class="section" hidden>
+        <h2>AIT Payload</h2>
+        <div class="grid">
+          <label class="field">
+            <span>sapSoldToAccount (string)</span>
+            <input id="aitSapSoldToAccount" value="AIPROD1RQ" />
+          </label>
+          <label class="field">
+            <span>emsId (number)</span>
+            <input id="aitEmsId" inputmode="numeric" value="199972" />
+          </label>
+          <label class="field">
+            <span>emFirmId (string)</span>
+            <input id="aitEmFirmId" value="1RQ" />
+          </label>
+          <label class="field">
+            <span>productDomain (string)</span>
+            <input id="aitProductDomain" value="AITM" />
+          </label>
+        </div>
+      </div>
+
+      <div id="aiaSection" class="section">
+        <h2>AIA Payload</h2>
+        <div class="grid">
+          <label class="field">
+            <span>EmsId (string)</span>
+            <input id="aiaEmsId" value="199972" />
+          </label>
+          <label class="field">
+            <span>SapSoldToAccount (string)</span>
+            <input id="aiaSapSoldToAccount" value="AIPROD1RQ" />
+          </label>
+          <label class="field">
+            <span>EmFirmId (string)</span>
+            <input id="aiaEmFirmId" value="1RQ" />
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <button id="generate" class="btn primary">Generate Hmac-Base64</button>
+        <span id="error" class="error" role="alert"></span>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row space">
+        <h2>RawBody (strict order)</h2>
+        <button id="copyRaw" class="btn secondary">Copy RawBody</button>
+      </div>
+      <textarea id="rawBody" rows="4" readonly></textarea>
+
+      <div class="row space">
+        <h2>Hmac-Base64</h2>
+        <button id="copyHmac" class="btn secondary">Copy Hmac-Base64</button>
+      </div>
+      <input id="hmac" readonly />
+
+      <p class="muted tiny">Note: Your secret key is used locally in this page to compute HMAC. Don’t use this on an untrusted machine.</p>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -8,6 +8,15 @@ Simple Avalonia desktop tool to generate **HMAC-SHA256 (Base64)** for strict JSO
 - Pushes to `master` run CI again (ensures nothing was skipped).
 - Pushing a tag like `v1.0.0` creates a GitHub Release and uploads a **single win-x64 EXE** named `Sign-HmacBase64-GenerationTool-v1.0.0.exe`.
 
+## GitHub Pages (static web UI)
+
+This repo includes a simple static web version in the `docs/` folder.
+
+- Pages source: `master` + `/docs`
+- After it deploys, open: `https://jaylathiatr.github.io/sign-hmac-base64-generation-tool/`
+
+Note: HMAC is computed locally in your browser (no API calls), but your secret key will still be entered into the page — use it only on a trusted machine.
+
 ## Run (dev)
 
 ```bash
