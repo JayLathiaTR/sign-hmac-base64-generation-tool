@@ -1,0 +1,52 @@
+name: Release (Single EXE)
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish win-x64 single EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore .\SignHmacTutorial.csproj
+
+      - name: Publish
+        run: |
+          $outDir = Join-Path $env:RUNNER_TEMP 'publish-win-x64'
+          dotnet publish .\SignHmacTutorial.csproj -c Release -r win-x64 --self-contained true -o $outDir `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:PublishTrimmed=false `
+            /p:PublishReadyToRun=true `
+            /p:DebugType=None `
+            /p:DebugSymbols=false
+          Get-ChildItem $outDir | Out-String | Write-Host
+          if (-not (Test-Path (Join-Path $outDir 'SignHmacTutorial.exe'))) { throw 'EXE not found after publish.' }
+        shell: pwsh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SignHmacTutorial-win-x64-single-exe
+          path: ${{ runner.temp }}\publish-win-x64\SignHmacTutorial.exe
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ runner.temp }}\publish-win-x64\SignHmacTutorial.exe
+          generate_release_notes: true
