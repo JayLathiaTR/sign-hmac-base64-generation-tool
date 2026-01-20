@@ -6,7 +6,7 @@ Simple Avalonia desktop tool to generate **HMAC-SHA256 (Base64)** for strict JSO
 
 - Pull Requests targeting `master` run CI (restore + build).
 - Pushes to `master` run CI again (ensures nothing was skipped).
-- Pushing a tag like `v1.0.0` creates a GitHub Release and uploads a **single win-x64 EXE**.
+- Pushing a tag like `v1.0.0` creates a GitHub Release and uploads a **single win-x64 EXE** named `Sign-HmacBase64-GenerationTool-v1.0.0.exe`.
 
 ## Run (dev)
 

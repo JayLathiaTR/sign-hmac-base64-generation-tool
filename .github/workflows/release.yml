@@ -36,17 +36,23 @@ jobs:
             /p:DebugType=None `
             /p:DebugSymbols=false
           Get-ChildItem $outDir | Out-String | Write-Host
-          if (-not (Test-Path (Join-Path $outDir 'SignHmacTutorial.exe'))) { throw 'EXE not found after publish.' }
+          $srcExe = Join-Path $outDir 'SignHmacTutorial.exe'
+          if (-not (Test-Path $srcExe)) { throw 'EXE not found after publish.' }
+
+          $tag = '${{ github.ref_name }}'
+          $dstExe = Join-Path $outDir ("Sign-HmacBase64-GenerationTool-$tag.exe")
+          Move-Item -Force $srcExe $dstExe
+          Write-Host "Renamed EXE to: $dstExe"
         shell: pwsh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: SignHmacTutorial-win-x64-single-exe
-          path: ${{ runner.temp }}\publish-win-x64\SignHmacTutorial.exe
+          path: ${{ runner.temp }}\publish-win-x64\Sign-HmacBase64-GenerationTool-${{ github.ref_name }}.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ runner.temp }}\publish-win-x64\SignHmacTutorial.exe
+          files: ${{ runner.temp }}\publish-win-x64\Sign-HmacBase64-GenerationTool-${{ github.ref_name }}.exe
           generate_release_notes: true
