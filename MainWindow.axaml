@@ -1,0 +1,88 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="SignHmacTutorial.MainWindow"
+        Width="860" Height="720"
+        MinWidth="760" MinHeight="640"
+  Background="#F4F5F7"
+        Title="Sign HMAC (AIT / AIA)">
+
+  <ScrollViewer>
+    <StackPanel Margin="16" Spacing="12">
+
+      <TextBlock FontSize="20" FontWeight="SemiBold">HMAC-Base64 Generator</TextBlock>
+      <TextBlock Opacity="0.75" TextWrapping="Wrap">
+        Select product, fill required fields (order and data-types are enforced), then click Generate.
+      </TextBlock>
+
+      <Border Background="#FFFFFF" BorderBrush="#D0D7DE" BorderThickness="1" CornerRadius="8" Padding="12">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="6">
+            <TextBlock FontWeight="SemiBold">Secret Key</TextBlock>
+            <TextBox Text="{Binding SecretKey, UpdateSourceTrigger=PropertyChanged}" PasswordChar="●" />
+          </StackPanel>
+
+          <StackPanel Spacing="6">
+            <TextBlock FontWeight="SemiBold">Product</TextBlock>
+            <ComboBox SelectedItem="{Binding SelectedProduct}" ItemsSource="{Binding Products}" />
+          </StackPanel>
+
+          <!-- AIT -->
+          <StackPanel IsVisible="{Binding IsAitSelected}" Spacing="10">
+            <TextBlock FontWeight="SemiBold">AIT Payload</TextBlock>
+            <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">sapSoldToAccount (string)</TextBlock>
+              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AitSapSoldToAccount, UpdateSourceTrigger=PropertyChanged}" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">emsId (number)</TextBlock>
+              <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AitEmsId, UpdateSourceTrigger=PropertyChanged}" />
+
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">emFirmId (string)</TextBlock>
+              <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding AitEmFirmId, UpdateSourceTrigger=PropertyChanged}" />
+
+              <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">productDomain (string)</TextBlock>
+              <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AitProductDomain, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+          </StackPanel>
+
+          <!-- AIA -->
+          <StackPanel IsVisible="{Binding IsAiaSelected}" Spacing="10">
+            <TextBlock FontWeight="SemiBold">AIA Payload</TextBlock>
+            <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">EmsId (string)</TextBlock>
+              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding AiaEmsId, UpdateSourceTrigger=PropertyChanged}" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">SapSoldToAccount (string)</TextBlock>
+              <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AiaSapSoldToAccount, UpdateSourceTrigger=PropertyChanged}" />
+
+              <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">EmFirmId (string)</TextBlock>
+              <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding AiaEmFirmId, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+          </StackPanel>
+
+          <TextBlock Foreground="#d9534f" TextWrapping="Wrap" Text="{Binding ErrorMessage}" />
+
+          <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="Generate Hmac-Base64" Command="{Binding GenerateCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <Border Background="#FFFFFF" BorderBrush="#D0D7DE" BorderThickness="1" CornerRadius="8" Padding="12">
+        <StackPanel Spacing="10">
+          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" ColumnSpacing="10">
+            <TextBlock Grid.Column="0" FontWeight="SemiBold">RawBody (strict order)</TextBlock>
+            <Button Grid.Column="1" Content="Copy RawBody" Click="CopyRawBody_Click" />
+          </Grid>
+          <TextBox Text="{Binding RawBody}" AcceptsReturn="True" IsReadOnly="True" MinHeight="90" />
+
+          <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto" ColumnSpacing="10">
+            <TextBlock Grid.Column="0" FontWeight="SemiBold">Hmac-Base64</TextBlock>
+            <Button Grid.Column="1" Content="Copy Hmac-Base64" Click="CopyHmac_Click" />
+          </Grid>
+          <TextBox Text="{Binding HmacBase64}" IsReadOnly="True" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</Window>
