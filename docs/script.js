@@ -185,7 +185,7 @@ async function callHealthApi(){
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function initializePage(){
   syncSections();
   setCorsTone('is-neutral');
   $('pageOrigin').textContent = window.location.origin || 'null';
@@ -194,4 +194,10 @@ window.addEventListener('DOMContentLoaded', () => {
   $('copyRaw').addEventListener('click', () => copyText($('rawBody').value));
   $('copyHmac').addEventListener('click', () => copyText($('hmac').value));
   $('callHealthApi').addEventListener('click', callHealthApi);
-});
+}
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initializePage, { once: true });
+} else {
+  initializePage();
+}
