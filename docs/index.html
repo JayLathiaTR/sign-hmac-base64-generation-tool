@@ -4,7 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sign HMAC (AIT / AIA)</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    window.__docsAssetVersion = String(Date.now());
+    const styleLink = document.createElement('link');
+    styleLink.rel = 'stylesheet';
+    styleLink.href = `./styles.css?v=${window.__docsAssetVersion}`;
+    document.head.appendChild(styleLink);
+  </script>
 </head>
 <body>
   <main class="container">
@@ -128,6 +134,10 @@
     </section>
   </main>
 
-  <script src="./script.js"></script>
+  <script>
+    const appScript = document.createElement('script');
+    appScript.src = `./script.js?v=${window.__docsAssetVersion}`;
+    document.body.appendChild(appScript);
+  </script>
 </body>
 </html>
