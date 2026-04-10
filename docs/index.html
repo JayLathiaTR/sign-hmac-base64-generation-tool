@@ -16,7 +16,7 @@
       <a class="btn secondary" href="https://github.com/JayLathiaTR/sign-hmac-base64-generation-tool" target="_blank" rel="noreferrer">GitHub</a>
     </header>
 
-    <section class="card">
+    <section id="corsDemoCard" class="card cors-card">
       <div class="grid">
         <label class="field">
           <span>Secret Key</span>
@@ -92,6 +92,39 @@
       <input id="hmac" readonly />
 
       <p class="muted tiny">Note: Your secret key is used locally in this page to compute HMAC. Don’t use this on an untrusted machine.</p>
+    </section>
+
+    <section class="card">
+      <div class="row space">
+        <div>
+          <h2>CORS Proof Demo</h2>
+          <p class="muted">This browser call should fail unless the backend explicitly allows this GitHub Pages origin.</p>
+        </div>
+        <button id="callHealthApi" class="btn secondary">Call Health API</button>
+      </div>
+
+      <label class="field">
+        <span>Health API URL</span>
+        <input id="healthApiUrl" value="https://demo.api.auditintelligence.thomsonreuters.com/csgateway/health/live" />
+      </label>
+
+      <div class="proof-grid">
+        <div class="proof-item">
+          <span class="proof-label">Page Origin</span>
+          <code id="pageOrigin"></code>
+        </div>
+        <div id="corsResultPanel" class="proof-item">
+          <span class="proof-label">Result</span>
+          <strong id="corsResult">Not run yet</strong>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Browser Output</span>
+        <textarea id="corsOutput" rows="8" readonly></textarea>
+      </label>
+
+      <p class="muted tiny">Expected outcome on GitHub Pages when CORS is not configured: the request is sent, but JavaScript cannot read the response and the browser reports a CORS error.</p>
     </section>
   </main>
 
