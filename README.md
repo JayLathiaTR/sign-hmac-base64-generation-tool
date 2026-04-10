@@ -17,6 +17,8 @@ This repo includes a simple static web version in the `docs/` folder.
 
 Note: HMAC is computed locally in your browser (no API calls), but your secret key will still be entered into the page — use it only on a trusted machine.
 
+The page also includes a `CORS Proof Demo` section. It performs a browser-side `fetch()` to a backend URL and will fail with a CORS error unless that backend returns an `Access-Control-Allow-Origin` header for the GitHub Pages origin.
+
 ## Run (dev)
 
 ```bash

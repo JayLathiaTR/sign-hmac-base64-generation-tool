@@ -5,6 +5,20 @@ function setError(msg){
   el.textContent = msg || '';
 }
 
+function setCorsTone(tone){
+  const resultPanel = $('corsResultPanel');
+  resultPanel.classList.remove('is-neutral', 'is-success', 'is-failure');
+
+  const nextTone = tone || 'is-neutral';
+  resultPanel.classList.add(nextTone);
+}
+
+function setCorsStatus(status, details, tone){
+  $('corsResult').textContent = status;
+  $('corsOutput').value = details || '';
+  setCorsTone(tone);
+}
+
 function toBase64(bytes){
   let binary = '';
   const arr = new Uint8Array(bytes);
@@ -119,10 +133,65 @@ async function copyText(text){
   document.body.removeChild(ta);
 }
 
+async function callHealthApi(){
+  const url = $('healthApiUrl').value.trim();
+  if (!url){
+    setCorsStatus('Blocked', 'Enter a backend URL first.', 'is-failure');
+    return;
+  }
+
+  setCorsStatus('Running...', `Fetching ${url}\nOrigin: ${window.location.origin || 'null'}`, 'is-neutral');
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      cache: 'no-store'
+    });
+
+    const body = await response.text();
+    const headers = [];
+    response.headers.forEach((value, key) => {
+      headers.push(`${key}: ${value}`);
+    });
+
+    setCorsStatus(
+      'Success',
+      [
+        `HTTP ${response.status} ${response.statusText}`,
+        headers.length ? `Headers:\n${headers.join('\n')}` : 'Headers: none exposed to browser code',
+        '',
+        'Body:',
+        body
+      ].join('\n'),
+      'is-success'
+    );
+  } catch (error) {
+    setCorsStatus(
+      'Blocked by CORS',
+      [
+        `Fetch to ${url} failed from origin ${window.location.origin || 'null'}.`,
+        '',
+        'What this means:',
+        'The browser refused to expose the response to this page because the backend did not allow this origin via CORS.',
+        '',
+        `Browser error: ${error && error.message ? error.message : String(error)}`,
+        '',
+        'Backend requirement:',
+        `Access-Control-Allow-Origin: ${window.location.origin || 'https://jaylathiatr.github.io'}`
+      ].join('\n'),
+      'is-failure'
+    );
+  }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   syncSections();
+  setCorsTone('is-neutral');
+  $('pageOrigin').textContent = window.location.origin || 'null';
   $('product').addEventListener('change', syncSections);
   $('generate').addEventListener('click', generate);
   $('copyRaw').addEventListener('click', () => copyText($('rawBody').value));
   $('copyHmac').addEventListener('click', () => copyText($('hmac').value));
+  $('callHealthApi').addEventListener('click', callHealthApi);
 });
